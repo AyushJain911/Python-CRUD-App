@@ -1,0 +1,68 @@
+<!-- templates/users/user_list.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'newapp/main.css' %}" />
+    <title>User List</title>
+  </head>
+  <body>
+    <div class="container">
+      <div>
+        <h1>User List</h1>
+
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+            <tr>
+              <td>{{ user.id }}</td>
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.role }}</td>
+              <td>
+                <form method="post" action="{% url 'delete_user' user.id %}">
+                  {% csrf_token %}
+                  <button type="submit">Delete</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <button>
+          <a href="{% url 'new_user' %}" class="new-user-button">New User</a>
+        </button>
+
+        <form id="searchForm" method="get">
+          <input
+            type="number"
+            id="userIdInput"
+            name="user_id"
+            placeholder="Enter User ID"
+            required
+          />
+          <button type="button" onclick="submitForm()">Search</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function submitForm() {
+        var userId = document.getElementById("userIdInput").value;
+        window.location.href = "/users/" + userId;
+      }
+    </script>
+  </body>
+</html>
